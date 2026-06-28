@@ -28,6 +28,7 @@ struct MeshtasticAppleApp: App {
 	private static let isRunningTests = NSClassFromString("XCTestCase") != nil || ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
 
 	init() {
+		Bundle.MeshtasticTW.applyTraditionalChineseDefaultAtLaunch()
 
 		let persistenceController: PersistenceController? = Self.isRunningTests ? nil : PersistenceController.shared
 #if DEBUG
@@ -231,6 +232,7 @@ struct MeshtasticAppleApp: App {
 				.environmentObject(accessoryManager)
 				.environmentObject(appState.router)
 				.environmentObject(MeshtasticAPI.shared)
+				.environment(\.locale, Bundle.MeshtasticTW.defaultLocale)
 			}
 		}
 		.onChange(of: scenePhase) { (_, newScenePhase) in
@@ -274,6 +276,7 @@ struct MeshtasticAppleApp: App {
 					.environmentObject(accessoryManager)
 					.environmentObject(appState.router)
 					.environmentObject(MeshtasticAPI.shared)
+					.environment(\.locale, Bundle.MeshtasticTW.defaultLocale)
 			}
 		}
 		.handlesExternalEvents(matching: [])

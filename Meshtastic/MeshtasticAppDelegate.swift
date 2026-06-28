@@ -15,6 +15,11 @@ class MeshtasticAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificat
 
 	var router: Router?
 
+	func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+		Bundle.MeshtasticTW.applyTraditionalChineseDefaultAtLaunch()
+		return true
+	}
+
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 		guard NSClassFromString("XCTestCase") == nil && ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else {
 			return true
@@ -46,9 +51,7 @@ class MeshtasticAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificat
 		#if targetEnvironment(simulator)
 		Logger.services.info("Skipping Siri authorization request in simulator benchmark harness")
 		#else
-		INPreferences.requestSiriAuthorization { status in
-			Logger.services.info("Siri authorization status: \(String(describing: status))")
-		}
+		SiriEntitlement.requestAuthorizationIfAvailable()
 		#endif
 		#endif
 		return true

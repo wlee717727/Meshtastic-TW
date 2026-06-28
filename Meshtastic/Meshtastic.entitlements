@@ -41,7 +41,7 @@
 	<true/>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)gvh.MeshtasticClient</string>
+		<string>$(AppIdentifierPrefix)com.wlee717727.MeshtasticTW</string>
 	</array>
 </dict>
 </plist>

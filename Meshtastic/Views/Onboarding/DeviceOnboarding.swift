@@ -440,11 +440,19 @@ struct DeviceOnboarding: View {
 			return .notifications
 		case .notifications:
 			if locationStatus == .authorizedWhenInUse || locationStatus == .authorizedAlways {
+				#if os(iOS) && !targetEnvironment(macCatalyst)
+				return SiriEntitlement.isAvailable ? .siri : nil
+				#else
 				return .siri
+				#endif
 			}
 			return .location
 		case .location:
+			#if os(iOS) && !targetEnvironment(macCatalyst)
+			return SiriEntitlement.isAvailable ? .siri : nil
+			#else
 			return .siri
+			#endif
 		case .siri:
 			return nil
 		}
@@ -579,19 +587,7 @@ struct DeviceOnboarding: View {
 		// Siri authorization prompt is not available on Mac Catalyst
 		Logger.services.info("Siri permissions not available on Mac Catalyst")
 		#else
-		await withCheckedContinuation { continuation in
-			INPreferences.requestSiriAuthorization { status in
-				switch status {
-				case .authorized:
-					Logger.services.info("Siri permissions are enabled")
-				case .denied:
-					Logger.services.info("Siri permissions denied")
-				default:
-					Logger.services.info("Siri permissions status: \(status.rawValue)")
-				}
-				continuation.resume()
-			}
-		}
+		await SiriEntitlement.requestAuthorizationIfAvailable()
 		#endif
 	}
 

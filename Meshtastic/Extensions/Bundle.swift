@@ -6,6 +6,22 @@
 //
 
 import Foundation
+import ObjectiveC
+
+private var meshtasticTWLocalizationBundleKey: UInt8 = 0
+
+private final class MeshtasticTWBundle: Bundle, @unchecked Sendable {
+	override func localizedString(forKey key: String, value: String?, table tableName: String?) -> String {
+		if let bundle = objc_getAssociatedObject(self, &meshtasticTWLocalizationBundleKey) as? Bundle {
+			return bundle.localizedString(forKey: key, value: value, table: tableName)
+		}
+		return super.localizedString(forKey: key, value: value, table: tableName)
+	}
+
+	override var preferredLocalizations: [String] {
+		["zh-Hant-TW"]
+	}
+}
 
 extension Bundle {
 	public var appName: String { getInfo("CFBundleName") }
@@ -43,5 +59,24 @@ extension Bundle {
 	public var documentationLanguageCode: String {
 		let preferred = preferredLocalizations.first ?? "en"
 		return Locale(identifier: preferred).language.languageCode?.identifier ?? "en"
+	}
+
+	/// Taiwan fork: force Traditional Chinese UI regardless of system language.
+	enum MeshtasticTW {
+		static let defaultLocale = Locale(identifier: "zh-Hant-TW")
+
+		static func applyTraditionalChineseDefaultAtLaunch() {
+			guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else { return }
+			UserDefaults.standard.set(["zh-Hant-TW"], forKey: "AppleLanguages")
+			guard let path = Bundle.main.path(forResource: "zh-Hant-TW", ofType: "lproj"),
+				  let bundle = Bundle(path: path) else { return }
+			object_setClass(Bundle.main, MeshtasticTWBundle.self)
+			objc_setAssociatedObject(
+				Bundle.main,
+				&meshtasticTWLocalizationBundleKey,
+				bundle,
+				.OBJC_ASSOCIATION_RETAIN_NONATOMIC
+			)
+		}
 	}
 }
