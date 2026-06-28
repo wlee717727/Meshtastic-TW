@@ -59,6 +59,19 @@
 
 ---
 
+## 官方版本聲明
+
+本專案不是 Meshtastic 官方發行版本，而是基於 Meshtastic-Apple 開源專案建立的繁體中文（台灣）在地化分支。
+
+若您需要官方穩定版本，建議使用：
+
+- Meshtastic 官方 GitHub Repository
+- Meshtastic 官方 App Store 發行版本
+
+本專案主要提供繁體中文使用者參考、學習、測試與社群交流使用。
+
+---
+
 ## 安裝方式（安裝到自己的 iPhone）
 
 由於 iOS 的安全機制，您**無法**像下載一般檔案一樣直接安裝 `.ipa`。請使用 **Xcode** 自行編譯並安裝到已連接的 iPhone。
@@ -159,6 +172,29 @@ Apple 要求所有 iOS App 必須經過簽章才能安裝到實機。因此：
 - **不承諾**代為簽章或代為上架
 
 請一律使用**您自己的 Apple ID** 在 Xcode 中完成簽章與安裝。
+
+---
+
+## Apple 簽名與安裝說明
+
+由於 Apple 的安全機制，iOS App 必須經過 Apple Developer 簽名才能安裝至 iPhone 或 iPad。
+
+因此，本 Repository **不提供**：
+
+- Apple Developer 憑證（Certificates）
+- Provisioning Profiles
+- Team ID
+- 私人簽名檔
+
+若要安裝本專案，請：
+
+1. Clone 或下載本 Repository
+2. 使用 Xcode 開啟專案
+3. 使用自己的 Apple ID / Apple Developer Team
+4. 修改 Bundle Identifier
+5. Build & Run 至自己的裝置
+
+本專案僅提供完整原始碼，所有使用者需自行完成 Apple 簽名流程。
 
 ---
 
